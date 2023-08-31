@@ -1,0 +1,509 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>QFService</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+</head>
+<body>
+    <main id="mainForm"></main>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+
+    <script type="text/babel">
+
+        class MainForm extends React.Component {
+            constructor() {
+                super();
+                this.state = {
+                    tin: '',
+                    scanTin: '',
+                    msrnie: '',
+                    scanMsrnie: '',
+                    msrn: '',
+                    scanMsrn: '',
+                    registrationDate: '',
+                    usrie: '',
+                    roomRental: '',
+                    fullName: '',
+                    abbreviation: ''
+                };
+            }
+            ChangeTin = (e) => {
+                let value = e.target.value;
+                let type = this.props.type;
+                let element = document.getElementById("tin");
+                if (type == 0 && /\d{12}/.test(value) || type != 0 && /\d{10}/.test(value)) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                    const formData = new FormData();
+                    formData.append("tin", value);
+                    var self = this;
+                    axios.post('/api/find', formData).then(function (response) {
+                        const user = response.data;
+                        self.setState({ msrnie: user.msrnie });
+                        self.setState({ msrn: user.msrn });
+                        self.setState({ registrationDate: user.registrationDate.split('.').reverse().join('-') });
+                        self.setState({ fullName: user.fullName });
+                        self.setState({ abbreviation: user.abbreviation });
+                        self.setState({ noContract: user.noContract });
+                        let abr = user.fullName.replace('ООО "', '').replace('"', '').split(/ |\-/).map(function (name) {
+                            return name[0].toUpperCase();
+                        }).join('');
+                        abr = "ООО «" + abr + "»";
+                        self.setState({ abbreviation: abr });
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+                else if (value.length == 0) {
+                    element.classList.remove("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+                this.setState({ tin: value });
+
+            }
+            ChangeScanTin = (e) => {
+                let element = document.getElementById("scanTin");
+                if (element.value) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+            }
+            ChangeScanMsrnie = (e) => {
+                let element = document.getElementById("scanMsrnie");
+                if (element.value) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+            }
+            ChangeScanMsrn = (e) => {
+                let element = document.getElementById("scanMsrn");
+                if (element.value) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+            }
+            ChangeScanUsrie = (e) => {
+                let element = document.getElementById("usrie");
+                if (element.value) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+            }
+            ChangeRoomRental = (e) => {
+                let element = document.getElementById("roomRental");
+                if (element.value) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+            }
+            ChangeAbbreviation = (e) => {
+                let element = document.getElementById("abbreviation");
+                let value = e.target.value;
+                if (/ООО.*?".*?"/.test(value)) {
+                    element.classList.remove("is-invalid");
+                    element.classList.add("is-valid");
+                }
+                else {
+                    element.classList.remove("is-valid");
+                    element.classList.add("is-invalid");
+                }
+                this.setState({ abbreviation: value });
+            }
+            ChangeFullName = (e) => {
+                let element = document.getElementById("fullName");
+                let value = e.target.value;
+                let abr = value.replace('ООО "', '').replace('"', '').split(/ |\-/).map(function (name) {
+                    return name[0].toUpperCase();
+                }).join('');
+                abr = 'ООО ""' + abr + '"';
+                this.setState({ abbreviation: abr });
+                console.log(this.state.abbreviation);
+                if (/ООО.*?".*?"/.test(value)) {
+                    element.classList.remove("is-invalid");
+                    element.classList.add("is-valid");
+                }
+                else {
+                    element.classList.remove("is-valid");
+                    element.classList.add("is-invalid");
+                }
+                this.setState({ fullName: value });
+            }
+            ChangeMsrnie = (e) => {
+                let element = document.getElementById("msrnie");
+                let value = e.target.value;
+                if (/\d{15}/.test(value)) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+                this.setState({ msrnie: value });
+            }
+            ChangeMsrn = (e) => {
+                let element = document.getElementById("msrn");
+                let value = e.target.value;
+                if (/\d{13}/.test(value)) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+                this.setState({ msrn: value });
+            }
+            ChangeRegistrationDate = (e) => {
+                let value = e.target.value;
+                this.setState({ registrationDate: value });
+            }
+            ChangeNoContract = (e) => {
+                let element = document.getElementById("noContract");
+                if (element.checked) {
+                    element.checked = true;
+                    element.value = "0";
+                }
+                else {
+                    element.checked = false;
+                    element.value = "1";
+                }
+                console.log(element.value);
+            }
+            render() {
+                let formIE = <div>
+                    <h5>Индивидуальный предприниматель (ИП)</h5>
+                    <div class="row">
+                        <div class="col p-2 align-self-end">
+                            <label for="tin" class="form-label">ИНН*</label>
+                            <input type="text" class="form-control" onChange={this.ChangeTin} value={this.state.tin} id="tin" maxLength='12' placeholder="XXXXXXXXXXXX" required pattern="\d{12}" />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="scanTin" class="form-label ">Скан ИНН*</label>
+                            <input type="file" class="form-control" onChange={this.ChangeScanTin} id="scanTin" required accept="image/jpeg,image/png,image/gif" />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="msrn" class="form-label">ОГРНИП*</label>
+                            <input type="text" class="form-control" value={this.state.msrnie} onChange={this.ChangeMsrnie} maxLength='15' id="msrnie" placeholder="XXXXXXXXXXXXXXX" pattern="\d{15}" required />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="scanMsrn" class="form-label">Скан ОГРНИП*</label>
+                            <input type="file" class="form-control" accept="image/jpeg,image/png,image/gif" onChange={this.ChangeScanMsrnie} id="scanMsrnie" />
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col p-2 align-self-end">
+                            <label for="registrationDate" class="form-label">Дата регистрации*</label>
+                            <input type="date" class="form-control" id="registrationDate" onChange={this.ChangeRegistrationDate} value={this.state.registrationDate} placeholder="ДД.ММ.ГГГГ" pattern="\d{2}.\d{2}.\d{4}" required />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="usrie" class="form-label">Скан выписки из ЕГРИП (не старше 3 месяцев)*</label>
+                            <input type="file" class="form-control" id="usrie" onChange={this.ChangeScanUsrie} accept="image/jpeg,image/png,image/gif" placeholder="Выберите или перетащите файл" required />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="roomRental" class="form-label">Скан договора аренды помещения (офиса)</label>
+                            <input type="file" class="form-control" id="roomRental" onChange={this.ChangeRoomRental} accept="image/jpeg,image/png,image/gif" placeholder="Выберите или перетащите файл" />
+                        </div>
+                        <div class="col p-2 align-self-end pb-3">
+                            <input class="form-check-input ms-1" type="checkbox" onChange={this.ChangeNoContract} id="noContract" value="0" />
+                            <label class="form-check-label" for="noContract">
+                                Нет договора
+                            </label>
+                        </div>
+                    </div>
+                </div>;
+                let formLLC = <div>
+                    <h5>Общество с ограниченной ответственностью (ООО)</h5>
+                    <div class="row">
+                        <div class="col p-2 align-self-end">
+                            <label for="fullName" class="form-label">Наименование полное*</label>
+                            <input type="text" class="form-control" id="fullName" onChange={this.ChangeFullName} value={this.state.fullName} placeholder="ООО «Московская промышленная компания»" required pattern="ООО.*?" />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="abbreviation" class="form-label ">Наименование сокращенное*</label>
+                            <input type="text" class="form-control " id="abbreviation" onChange={this.ChangeAbbreviation} value={this.state.abbreviation} placeholder="ООО «МПК»" required pattern="ООО.*?" />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="registrationDate" class="form-label">Дата регистрации*</label>
+                            <input type="date" class="form-control" id="registrationDate" value={this.state.registrationDate} onChange={this.ChangeRegistrationDate} placeholder="ДД.ММ.ГГГГ" required />
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col p-2 align-self-end">
+                            <label for="tin" class="form-label">ИНН*</label>
+                            <input type="text" class="form-control" id="tin" maxLength='10' value={this.state.tin} onChange={this.ChangeTin} placeholder="XXXXXXXX" required pattern="\d{10}" />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="scanTin" class="form-label ">Скан ИНН*</label>
+                            <input type="file" class="form-control " onChange={this.ChangeScanTin} id="scanTin" accept="image/jpeg,image/png,image/gif" required />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="msrn" class="form-label">ОГРН*</label>
+                            <input type="text" class="form-control " id="msrn" onChange={this.ChangeMsrn} value={this.state.msrn} pattern="\d{13}" maxLength='13' placeholder="XXXXXXXXXXXXXXX" required />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="scanMsrn" class="form-label">Скан ОГРН*</label>
+                            <input type="file" class="form-control" id="scanMsrn" onChange={this.ChangeScanMsrn} accept="image/jpeg,image/png,image/gif" required />
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col p-2 align-self-end">
+                            <label for="usrie" class="form-label">Скан выписки из ЕГРИП (не старше 3 месяцев)*</label>
+                            <input type="file" class="form-control" id="usrie" placeholder="Выберите или перетащите файл" onChange={this.ChangeScanUsrie} required accept="image/jpeg,image/png,image/gif" required />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="roomRental" class="form-label">Скан договора аренды помещения (офиса)*</label>
+                            <input type="file" class="form-control" id="roomRental" placeholder="Выберите или перетащите файл*" onChange={this.ChangeRoomRental} required accept="image/jpeg,image/png,image/gif" required />
+                        </div>
+                        <div class="col p-2 align-self-end pb-3">
+                            <input class="form-check-input ms-1" type="checkbox" id="noContract" onChange={this.ChangeNoContract} value="0" />
+                            <label class="form-check-label" for="noContract">
+                                Нет договора
+                            </label>
+                        </div>
+                    </div>
+                </div>;
+                let type = this.props.type;
+                let form = type == 0 ? formIE : formLLC;
+                return <div> {form} </div>;
+            }
+        }
+
+        class BankDetails extends React.Component {
+            constructor() {
+                super();
+                this.state = {
+                    bic: '',
+                    bankName: '',
+                    checkingAccount: '',
+                    correspondentAccount: ''
+                };
+            }
+            ChangeBic = (e) => {
+                let value = e.target.value;
+                let element = document.getElementById("bic");
+                if (/\d{9}/.test(value)) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                    const formData = new FormData();
+                    formData.append("bic", value);
+                    var self = this;
+                    axios.post('/api/findBank', formData).then(function (response) {
+                        const bank = response.data;
+                        self.setState({ bankName: bank.bankName });
+                        self.setState({ correspondentAccount: bank.correspondentAccount });
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+                else if (value.length == 0) {
+                    element.classList.remove("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+                this.setState({ bic: value });
+
+            }
+            ChangeBankName = (e) => {
+                let element = document.getElementById("bankName");
+                let value = e.target.value;
+                if (value.length > 6) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+                this.setState({ bankName: value });
+            }
+            ChangeCheckingAccount = (e) => {
+                let element = document.getElementById("checkingAccount");
+                let value = e.target.value;
+                if (/\d{20}/.test(value)) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+                this.setState({ checkingAccount: value });
+            }
+            ChangeCorrespondentAccount = (e) => {
+                let element = document.getElementById("correspondentAccount");
+                let value = e.target.value;
+                if (/\d{20}/.test(value)) {
+                    element.classList.add("is-valid");
+                    element.classList.remove("is-invalid");
+                }
+                else {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                }
+                this.setState({ correspondentAccount: value });
+            }
+            render() {
+                return <div class="mb-3 mt-3">
+                    <h5>Банковские реквизиты</h5>
+                    <div class="row">
+                        <div class="col p-2 align-self-end">
+                            <label for="bic" class="form-label">БИК*</label>
+                            <input type="text" class="form-control" id="bic" onChange={this.ChangeBic} value={this.state.bic} placeholder="XXXXXXXXX" required pattern="\d{9}" maxLength='9' />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="bankName" class="form-label ">Название филиала банка*</label>
+                            <input type="text" class="form-control " id="bankName" onChange={this.ChangeBankName} value={this.state.bankName} placeholder="ООО «Московская промышленная компания»" required />
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col p-2 align-self-end">
+                            <label for="checkingAccount" class="form-label">Расчетный счет*</label>
+                            <input type="text" class="form-control" id="checkingAccount" onChange={this.ChangeCheckingAccount} value={this.state.checkingAccount} placeholder="хххххххххххххххххххх" maxLength='20' pattern="\d{20}" required />
+                        </div>
+                        <div class="col p-2 align-self-end">
+                            <label for="correspondentAccount" class="form-label ">Корреспондентский счет*</label>
+                            <input type="text" class="form-control " id="correspondentAccount" onChange={this.ChangeCorrespondentAccount} value={this.state.correspondentAccount} placeholder="хххххххххххххххххххх" maxLength='20' pattern="\d{20}" required />
+                        </div>
+                    </div>
+                </div>;
+            }
+        }
+        class Main extends React.Component {
+            constructor() {
+                super();
+                this.form = React.createRef();
+                this.bankDetails = React.createRef();
+                this.state = {
+                    type: 0,
+                    step: 1,
+                };
+            }
+            handleChange = (e) => {
+                this.setState({
+                    type: e.target.value
+                });
+            }
+            handleSubmit = (e) => {
+                e.preventDefault();
+                this.setState({ step: this.state.step + 1 });
+                let formData = new FormData();
+                let tin = document.getElementById("tin");
+                let scanTin = document.getElementById("scanTin");
+                let msrnie = document.getElementById("msrnie");
+                let scanMsrnie = document.getElementById("scanMsrnie");
+                let registrationDate = document.getElementById("registrationDate");
+                let usrie = document.getElementById("usrie");
+                let roomRental = document.getElementById("roomRental");
+                let noContract = document.getElementById("noContract");
+                let fullName = document.getElementById("fullName");
+                let abbreviation = document.getElementById("abbreviation");
+                let msrn = document.getElementById("msrn");
+                let scanMsrn = document.getElementById("scanMsrn");
+                formData.append("tin", tin.value);
+                formData.append("scanTin", scanTin.files[0], String(tin.value) + '_scanTin');
+                if (msrnie != null) formData.append("msrnie", msrnie.value);
+                if (scanMsrnie != null) formData.append("scanMsrnie", scanMsrnie.files[0], String(tin.value) + '_scanMsrnie');
+                formData.append("registrationDate", registrationDate.value);
+                formData.append("usrie", usrie.files[0], String(tin.value) + '_usrie');
+                if (roomRental != null) formData.append("roomRental", roomRental.files[0], String(tin.value) + '_roomRental');
+                formData.append("noContract", noContract.value);
+                if (fullName != null) formData.append("fullName", fullName.value);
+                if (abbreviation != null) formData.append("abbreviation", abbreviation.value);
+                if (msrn != null) formData.append("msrn", msrn.value);
+                if (scanMsrn != null) formData.append("scanMsrn", scanMsrn.files[0], String(tin.value) + '_scanMsrn');
+                axios.post('/api/load', formData, { "Content-Type": "multipart/form-data" }).then(function (response) {
+                    element.classList.remove("is-invalid");
+                    element.classList.add("is-valid");
+                    console.log(response);
+                }).catch(function (error) {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                    console.log(error);
+                });
+            }
+            handleSend = (e) => {
+                e.preventDefault();
+         this.setState({ step: this.state.step - 1 });
+                let formData = new FormData();
+                let bic = document.getElementById("bic");
+                let bankName = document.getElementById("bankName");
+                let checkingAccount = document.getElementById("checkingAccount");
+                let correspondentAccount = document.getElementById("correspondentAccount");
+                formData.append("bic", bic.value);
+                formData.append("bankName", bankName.value);
+                formData.append("checkingAccount", checkingAccount.value);
+                formData.append("correspondentAccount", correspondentAccount.value);
+                axios.post('/api/send', formData).then(function (response) {
+                    element.classList.remove("is-invalid");
+                    element.classList.add("is-valid");
+                    alert("Пользователь успешно добавлен!");
+                    console.log(response);
+                }).catch(function (error) {
+                    element.classList.add("is-invalid");
+                    element.classList.remove("is-valid");
+                    console.log(error);
+                    alert("Пользователь не добавлен!");
+                });
+            }
+
+
+            render() {
+                let select = <form id="from" class="row m-5" onSubmit={this.handleSubmit} enctype="multipart/form-data">
+                    <div class="mb-3 mt-3">
+                        <h5>Форма собственности</h5>
+                        <label for="selecteType" class="form-label mt-3">Вид деятельности*</label>
+                        <select id="selecteType" onChange={this.handleChange} value={this.state.type} class="form-select w-50 mb-5">
+                            <option value="0" selected>Индивидуальный предприниматель (ИП)</option>
+                            <option value="1">Общество с ограниченной ответственностью (ООО)</option>
+                        </select>
+                        <MainForm type={this.state.type} />
+                    </div>
+                    <div>
+                        <input type="submit" value="Далее" class="btn fs-5 btn-primary float-end" />
+                    </div>
+                </form>
+                let details = <form class="row m-5" onSubmit={this.handleSend} enctype="multipart/form-data"><BankDetails />
+                    <div>
+                        <input type="submit" class="btn fs-5 btn-primary float-end" value="Отправить" />
+                    </div>
+                </form>;
+                let page = this.state.step == 1 ? select : details;
+
+                return (<div>{page}</div>);
+            }
+        }
+        ReactDOM.render(<Main />, document.getElementById('mainForm'));
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "CkaqWenBQjVZsgFzYky/YcYY6RkMeSnkOslOKdCrYko=",
+  "Source": "QuestionnaireFillingService",
+  "BasePath": "_content/QuestionnaireFillingService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "QuestionnaireFillingService\\wwwroot",
+      "Source": "QuestionnaireFillingService",
+      "ContentRoot": "P:\\Тестовые задания\\QuestionnaireFillingService-работает Selenium\\QuestionnaireFillingService\\wwwroot\\",
+      "BasePath": "_content/QuestionnaireFillingService",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

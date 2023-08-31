@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "P:\\Тестовые задания\\QuestionnaireFillingService-работает Seleium\\QuestionnaireFillingService\\wwwroot\\css\\style.css",
+      "PackagePath": "staticwebassets\\css\\style.css"
+    },
+    {
+      "Id": "P:\\Тестовые задания\\QuestionnaireFillingService-работает Seleium\\QuestionnaireFillingService\\wwwroot\\js\\app.jsx",
+      "PackagePath": "staticwebassets\\js\\app.jsx"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.QuestionnaireFillingService.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.QuestionnaireFillingService.props",
+      "PackagePath": "build\\QuestionnaireFillingService.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.QuestionnaireFillingService.props",
+      "PackagePath": "buildMultiTargeting\\QuestionnaireFillingService.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.QuestionnaireFillingService.props",
+      "PackagePath": "buildTransitive\\QuestionnaireFillingService.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
